@@ -18,18 +18,8 @@ const AppContext = ({ children }) => {
         setIsSidebarOpen(false);
     }
 
-    const selectSubmenu = (id) => {
-        if (id === null) {
-            const tmout = setTimeout(() => setPageId(id), 1500);
-            return () => clearTimeout(tmout);
-        } else {
-            // console.log(id);
-            setPageId(id);
-        }
-    }
-
     return (
-        <GlobalContext.Provider value={{ isSidebarOpen, openSidebar, closeSidebar, pageId, selectSubmenu }}>
+        <GlobalContext.Provider value={{ isSidebarOpen, openSidebar, closeSidebar, pageId, setPageId }}>
             {children}
         </GlobalContext.Provider>
     )

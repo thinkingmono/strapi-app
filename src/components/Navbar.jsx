@@ -1,22 +1,22 @@
-import logo from '../assets/react.svg'
 import { FaBars } from 'react-icons/fa'
 import { useGlobalContext } from '../utils/context'
-import sublinks from '../data'
+import NavLinks from './NavLinks';
 
 const Navbar = () => {
-  const { openSidebar, selectSubmenu } = useGlobalContext();
+  const { openSidebar, setPageId } = useGlobalContext();
+
+  const handleSubmenu = (e) => {
+    if(!e.target.classList.contains('nav-link')){
+      setPageId(null);
+    }
+  }
 
   return (
-    <nav>
+    <nav onMouseOver={handleSubmenu}>
       <div className="nav-center">
-        <img src={logo} alt="logo" className="logo" />
+        <h3 className="logo">strapi</h3>
         <button type="button" className="toggle-btn" onClick={openSidebar}><FaBars /></button>
-        <ul className="nav-links">
-          {sublinks && sublinks.map((link) => {
-            const { pageId, page } = link;
-            return <li key={pageId} onMouseEnter={() => selectSubmenu(pageId)} onMouseLeave={() => selectSubmenu(null)}><a href="" className='nav-link'>{page}</a></li>
-          })}
-        </ul>
+        <NavLinks />
       </div>
     </nav>
   )

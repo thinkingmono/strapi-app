@@ -1,23 +1,32 @@
 import { useGlobalContext } from "../utils/context"
 import sublinks from "../data";
+import { useRef } from "react";
 
 const Submenu = () => {
-  const { pageId } = useGlobalContext();
-  const submenu = sublinks.filter((link) => link.pageId === pageId);
+  const { pageId, setPageId } = useGlobalContext();
+  const currentPage = sublinks.find((link) => link.pageId === pageId);
+  const submenuContainer = useRef();
+
+  const handleMouseLeave = (event) => {
+    const submenu = submenuContainer.current;
+    const { left, right, bottom } = submenu.getBoundingClientRect();
+    const { clientX, clientY } = event;
+
+    if (clientX < left - 1 || clientY > bottom - 1 || clientX > right - 1) {
+      setPageId(null);
+    }
+  }
+
   return (
-    <>
-      {submenu.length > 0 && (
-        <div className='submenu show-submenu'>
-          <h5>{submenu[0].page}</h5>
-          <ul className="submenu-links">
-            {submenu[0] && submenu[0].links.map((sublink) => {
-              const { id, label, icon, url } = sublink;
-              return <li key={id}><a href={url}>{icon}{label}</a></li>
-            })}
-          </ul>
-        </div >
-      )}
-    </>
+    <div className={currentPage ? 'submenu show-submenu' : 'submenu'} onMouseLeave={handleMouseLeave} ref={submenuContainer}>
+      <h5>{currentPage?.page}</h5>
+      <div className="submenu-links" style={{ gridTemplateColumns: currentPage?.links?.length > 3 ? '1fr 1fr' : '1fr' }}>
+        {currentPage?.links?.map((sublink) => {
+          const { id, label, icon, url } = sublink;
+          return <a href={url} key={id}>{icon}{label}</a>
+        })}
+      </div>
+    </div >
   )
 }
 

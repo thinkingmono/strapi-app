@@ -455,7 +455,7 @@ Nav Links
   .nav-links {
     display: flex;
     justify-content: center;
-    align-self: center;
+    align-self: stretch;
   }
 
   .nav-center {
